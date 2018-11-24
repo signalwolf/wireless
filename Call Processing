@@ -1,0 +1,96 @@
+1. Power on --> idle not camp + PLMN selection --> idle camp  + system access --> connected
+2. Connected + release --> idle camped + loss of coverage --> idle not camped
+3. Connected + RLF --> dle not camped.
+4. PLMN seach can be manual or automatic. All detected PLMNs with RSRP >= -100dBm reported to NAS without RSRP,
+RSRP < -100 dBm reported with RSRP.
+5. PSS/SSS: frame timing and subframe timing is matched.
+6. MIBs: 40ms on PBCH. DL BW, PHICH config, SFN. DL BW specified the number of RBs.
+    6: 1.4MHz; 15: 3.5MHz; 25:5MHz, 50: 10MHz, 75:15MHz, 100: 20MHz.
+7. SIBs: PDSCH with 80ms. It includes all other SIBs specified in SIB1.
+8. SIB1: PLMN; Qrxlevelmin; SI scheduling.
+9. SIB2: Acess Parameters and common channel config.
+    RACH config,
+        powerRampingSteps
+        preambleTransMax
+        # of Preamble: 64
+        Expected Rx of RA RNTI: RA responseWindow.
+        PreambleinitialReciviedTargetPower
+        Contention resolution timer.
+        RAR (MSG2): Timing Advance, TC-RNTI and UL Grant
+            timing advance: NW measure UE's PUCCH/PUSCH/SRS reception time and the subframe time.
+        MSG3:
+        MSG4: upon successful contention resolution, TC RNTI become C-RNTI.
+    PDSCH, PUSCH, PUCCH config.
+    UE frequency info (UL), SRS, UL power control
+    TAT: maximum number of subframes that a UE should consider itself time aligned without timing update from network.
+    Timers:
+           T310: related to N310. UE out of sync timer start whe N310 detected, stop when N311 received. Expired, UE RLF.
+           T300: RRC connection request timer
+           T301: RRC re-establishment request
+           T304: RRC connection configuration
+           T311: RRC re-establishment
+     page and DRx:
+           paging cycle. In between UE shall sleep. (DRX, Discontinuous Reception)
+10. SIB3: Cell reselection parameters
+    UE does not perform cell reselection if SIB3 is not broadcast.
+    Hysteresis: used to aviod ping pong.
+    S nonintrasearch and Thresh seringlow, cell priority.
+11. SIB4: Intra-frequency neighbor cell infoae
+12. SIB5: Inter-frequency neighbor cell info
+13. SIB6 --- SIB8: inter-RAT neighbor cell info.
+14. Reselection:
+    Intra-frequency cell reselection:
+        Only start measurement when the S servingcell < S intraseach
+        Only reselection if neighbor cell is Qoffset + Qhyst stronger than serving cell.
+        1. cell is camped. Yes
+        2. Sintrasearch included:
+            Yes: S Serving cell > S intrasearch: if yes, No need to do intra search.
+        3. No. Perform measurement on neighbor cell:
+            If neighbor cell stronger than serving cell for T reselection. Perform reselection.
+            neighbor cell measurment = real measurement - Q offset
+            serving cell measurement = real measurement + Q hyst
+    Inter-frequency cell reselection:
+        1. Start measure neighbor cell:
+            If inter-frequency neighbor have higher priority
+            or S serving cell < S nonintraserach
+        2. reselection:
+            If high priory cell's measurement > threshold high
+            for equal priority: follow the intra-frequency model
+            for low priority: S serving < Threshld serivng low; Sneighbor > threshold low
+15. Handover:
+    Event base or periodic report
+        A1: serving cell become better than an absolute threshold
+        A2:                     worse
+        A3: neighbor cell become an offset better than serving cell
+        A4: neighbor cell become better than an absolute threshold
+        A5: serving cell become worse than an absolute threshold and neighbo cell become better than an aboslute threshold
+        B1: Inter RAT neighbor become better than an absolute threshold
+        B2: similar to B2.
+    TTT: time to trigger, report interval, report amount.
+    Inter-frequency object have an measurement gap. UE suspended data reception and measure on other RAT.
+    RSRQ: N * RSRP/ RSSI where N is number of RBs.
+
+    Two type of handover: X2 and S1:
+        X2: least complex. Handover is negotiate directly between the two eNBs.
+            Source eNB sent handover request to target eNB.
+            Target eNB sent handover request ACK
+            Source eNB sent RRC connection reconfig to UE. DL Data frowarded to target eNB.
+            UE RACH
+            UE start to receive the SIBs and sent RRC connection reconfig complete to target cell.
+        S1: no X2 exist between two eNB. (less common see):
+            Same as X2 except change in NW side and TAU needed.
+
+16. RLF recovery:
+    Type of RLFs:
+        T310 expired: Out of sync BLER > 10% > N310. T310 start.
+        RACH failure:
+            UL DATA RACH
+            DL DATA RACH
+            uplink time alignment timer expired.
+        RLC MAX retx:
+        T304 expired
+    RLF recovery:
+        Once RLF been declared, timer T311 started.
+        Once T311 started, UE attempts cell reselection.
+        If successful goes to idle state, then UE starts the T301 and begin the connection reestablishment.
+        IF T301 expired, UE goes to idle state.

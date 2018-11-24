@@ -1,0 +1,41 @@
+1. SC FDMA: UL achieve lower Peak to Average Ratio.
+2. 12 subcarrier and 14 symbols is 1 PRB
+3. 1 subcarrier and 1 symbol is 1 RE.
+4. REG is 4 -6 RE to carry control information
+5. Alamuti code:
+6. Only 1 - 2 codewords and 1 -4 layers. So there is an mapping.
+7. Channels:
+    PDSCH: User Plane data and dedicated signling
+        Use the MCS info from PDCCH.
+    PBCH: BW, SFN, PHICH config
+        40ms, 4 OFDM symbol in second slot of subframe 0.
+    PCFICH: UE control formate info (CFI) for DL control channel:
+            Number of OFDM symbols used for PDCCH.
+            first OFDM symbol of all subframe.
+    PHICH: ACK/NACK for uplink
+    PDCCH: DCI info.
+        UL assignment; Format 0
+        DL assignment: Format 1/2 MCS, RV,
+            1A: PDSCH
+            2: PDSCH with 2 codeword - closed loop SU MIMO
+            2A: PDSCH with 2 codeword - open loop SU MIMO
+        UL power control command: Format 3.
+        paging indicator.
+
+    CRS:
+        Channel estimation for demodulation --> UE RS
+        CQI, PMI and RI --> CSI RS and CRS
+        Cell reselection and handover --> CRS
+        For 2CRS, every 3 RE in frequency domain have one CRS port and it exist on symbol 0/4/7/11
+        For 4CRS, CRS0/1 is same, CRS3/4 is extend only on symbol0/7
+    PSS/SSS:
+        subframe 0/5, two/one symbol before end of first slot on every frame
+        PSS: subframe timing, exact carrier frequency, CP lenght
+        SSS: frame timing, cell ID
+
+8. TPC command:
+    In DCI of PDCCH.
+
+9. Contension Free/ based:
+    Contention based is use a pre-defined preamble sequence and PRACH ID in the handover RRC message for RACH.
+    if handover command don't have those info. Then we needed to do contention based.

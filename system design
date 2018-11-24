@@ -1,0 +1,10 @@
+
+1. RFIC: convert analog signal to digital one
+    a. LNA gain
+    b. down sampling
+    c. remove DC channel
+    d. ADC: oversampling
+2. Digital domain:
+    a. DC estimation and control loop.
+    b. LNA gain control loop
+    c. Frequency tracking loop
