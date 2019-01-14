@@ -21,7 +21,7 @@
             2A: PDSCH with 2 codeword - open loop SU MIMO
         UL power control command: Format 3.
         paging indicator.
-
+        paging indicator.
     CRS:
         Channel estimation for demodulation --> UE RS
         CQI, PMI and RI --> CSI RS and CRS

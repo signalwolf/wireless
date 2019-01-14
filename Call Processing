@@ -1,6 +1,6 @@
 1. Power on --> idle not camp + PLMN selection --> idle camp  + system access --> connected
 2. Connected + release --> idle camped + loss of coverage --> idle not camped
-3. Connected + RLF --> dle not camped.
+3. Connected + RLF --> idle not camped.
 4. PLMN seach can be manual or automatic. All detected PLMNs with RSRP >= -100dBm reported to NAS without RSRP,
 RSRP < -100 dBm reported with RSRP.
 5. PSS/SSS: frame timing and subframe timing is matched.
